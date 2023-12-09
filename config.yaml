@@ -1,0 +1,7 @@
+name: Tokyo
+cell_size: 0.04 # Define the size of each cell in degrees
+boundaries: # Example: https://overpass-api.de/api/map?bbox=138.9001,35.0604,141.0562,36.1157
+  lat_min: 35.0604
+  lat_max: 36.1157
+  long_min: 138.9001
+  long_max: 141.0562

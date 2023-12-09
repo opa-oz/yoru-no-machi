@@ -15,9 +15,13 @@ async def fetch_url(session: ClientSession, url: str, output_directory: Path, in
     :param index: The index used to generate the filename for saving the content.
     :return: The path of the saved file as a string.
     """
+    target = output_directory / 'chunk_{:04d}.osm'.format(index)
+
+    if target.exists():
+        return str(target)
+
     async with session.get(url) as response:
         content = await response.text()
-        target = output_directory / 'chunk_{:04d}.osm'.format(index)
 
         with open(target, 'w') as f:
             f.write(content)
@@ -37,7 +41,7 @@ async def batch_process(urls: list[str], output_directory: Path) -> list[Path]:
     :return: A list of Path objects representing the paths to the saved files.
     :rtype: list[Path]
     """
-    conn = aiohttp.TCPConnector(limit=5)  # limit concurrency to 5
+    conn = aiohttp.TCPConnector(limit=5, force_close=True)  # limit concurrency to 5
 
     async with ClientSession(connector=conn) as session:
         tasks = []
